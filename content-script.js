@@ -61,6 +61,8 @@
     const url = target.href;
     if (!url || url.startsWith('javascript:')) return;
 
+    if (!event.shiftKey && !event.ctrlKey) return;
+
     event.preventDefault();
     event.stopPropagation();
 
