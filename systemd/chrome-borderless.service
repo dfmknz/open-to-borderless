@@ -1,0 +1,11 @@
+[Unit]
+Description=Chrome Borderless HTTP Server
+
+[Service]
+Type=simple
+ExecStart=/home/%u/.config/chrome-borderless/daemon.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
