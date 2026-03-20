@@ -8,7 +8,7 @@ Click the extension icon in your Chrome toolbar to open the settings popup.
 
 ## Modifier Configuration
 
-The extension requires **middle-click** plus at least one modifier key.
+The extension requires **left-click** or **middle-click** plus at least one modifier key.
 
 ### Available Modifiers
 
@@ -28,9 +28,9 @@ The extension requires **middle-click** plus at least one modifier key.
 4. Settings save automatically
 
 The shortcut display shows your current configuration:
-- `Middle + Shift` (Shift only)
-- `Middle + Ctrl` (Ctrl only)
-- `Middle + Shift + Ctrl` (Either modifier)
+- `Left + Shift` or `Middle + Shift` (Shift only)
+- `Left + Ctrl` or `Middle + Ctrl` (Ctrl only)
+- `Left + Shift + Ctrl` or `Middle + Shift + Ctrl` (Either modifier)
 
 ## Enabling/Disabling
 
@@ -40,7 +40,7 @@ Use the **Extension Enabled** toggle in the popup to quickly enable or disable t
 
 1. Navigate to any webpage
 2. Hold your configured modifier key(s) (Shift, Ctrl, or both)
-3. **Middle-click** on any link
+3. **Left-click** or **Middle-click** on any link
 4. The link opens in a new borderless (frameless) Chromium window
 
 ### Middle-Click on Trackpad

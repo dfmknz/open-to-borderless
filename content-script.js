@@ -53,7 +53,7 @@
   function handleClick(event) {
     if (!contextValid) return;
 
-    if (event.button !== 1) return;
+    if (event.button !== 0 && event.button !== 1) return;
 
     const target = event.target.closest('a');
     if (!target) return;

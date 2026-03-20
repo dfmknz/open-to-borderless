@@ -9,11 +9,11 @@
   <img src="https://img.shields.io/badge/Chrome%20Extension-MV3-green?style=flat-square" alt="Chrome MV3">
 </p>
 
-Open links in borderless (frameless) windows with **middle-click** + **modifier keys** on Hyprland.
+Open links in borderless (frameless) windows with **left-click** or **middle-click** + **modifier keys** on Hyprland.
 
 ## Features
 
-- **Middle-click + Shift** to open links in borderless windows
+- **Left-click or Middle-click + Shift/Ctrl** to open links in borderless windows
 - **Configurable modifiers** (Shift, Ctrl, or both)
 - **Toggle on/off** from extension popup
 - **Automatic startup** via systemd or autostart
@@ -60,7 +60,7 @@ systemctl --user start chrome-borderless
 
 1. Open the extension popup by clicking the icon
 2. Configure your preferred modifier keys (Shift, Ctrl, or both)
-3. Middle-click any link while holding your chosen modifier(s)
+3. Left-click or middle-click any link while holding your chosen modifier(s)
 4. The link opens in a borderless Chromium window
 
 ## Documentation
@@ -75,8 +75,8 @@ systemctl --user start chrome-borderless
 
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│  Content Script │───▶│  Background.js    │───▶│  HTTP Daemon    │
-│  (middle-click) │    │  (fetch localhost)│    │  (Python)       │
+│  Content Script │───▶│  Background.js   │───▶│  HTTP Daemon    │
+│  (click events) │    │  (fetch localhost)│   │  (Python)       │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
                                                         │
                                                         ▼
