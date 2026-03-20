@@ -78,6 +78,7 @@
     contextValid = false;
   });
 
+  document.addEventListener('click', handleClick, true);
   document.addEventListener('auxclick', handleClick, true);
 
   // Start connection
