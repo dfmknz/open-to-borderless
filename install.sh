@@ -47,6 +47,10 @@ sleep 1
 echo "Enabling auto-startup..."
 systemctl --user enable chrome-borderless 2>/dev/null || echo "Note: systemctl not available, using autostart instead"
 
+echo "Note: For boot persistence, run this command once:"
+echo "  sudo loginctl enable-linger"
+echo ""
+
 echo ""
 echo "Installation complete!"
 echo ""
