@@ -6,6 +6,9 @@ Type=simple
 ExecStart=/home/%u/.config/chrome-borderless/daemon.py
 Restart=on-failure
 RestartSec=5
+Environment="WAYLAND_DISPLAY=wayland-0"
+Environment="DISPLAY=:0"
+Environment="PATH=/usr/local/bin:/usr/bin:/bin"
 
 [Install]
 WantedBy=default.target

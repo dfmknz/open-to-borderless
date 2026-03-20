@@ -45,7 +45,9 @@ $INSTALL_DIR/daemon.py &
 sleep 1
 
 echo "Enabling auto-startup..."
+systemctl --user daemon-reload 2>/dev/null || true
 systemctl --user enable chrome-borderless 2>/dev/null || echo "Note: systemctl not available, using autostart instead"
+systemctl --user restart chrome-borderless 2>/dev/null || true
 
 echo ""
 echo "Installation complete!"
