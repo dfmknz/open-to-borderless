@@ -1,6 +1,0 @@
-{
-  "name": "com.chrome_borderless.daemon",
-  "description": "Chrome Borderless Window Daemon",
-  "path": "~/.config/chrome-borderless/daemon.py",
-  "type": "stdio"
-}
