@@ -79,8 +79,8 @@ cp systemd/chrome-borderless.desktop ~/.config/autostart/
 1. Open the extension popup by clicking the icon in your toolbar
 2. Toggle the extension to "Enabled" if needed
 3. Configure your modifier preferences (Shift, Ctrl, or both)
-4. Visit any webpage and middle-click + Shift on a link
-5. A borderless Chromium window should open with that link
+  4. Visit any webpage and left-click or middle-click + Shift on a link
+  5. A borderless Chromium window should open with that link
 
 ## Updating
 
@@ -89,11 +89,16 @@ To update to the latest version:
 ```bash
 cd open-to-borderless
 git pull
-./install.sh
-# Or manually restart the daemon
-pkill -f chrome-borderless
+
+# Restart the daemon to pick up changes
+pkill -f daemon.py
 ~/.config/chrome-borderless/daemon.py &
+
+# Or restart via systemd (if using systemd)
+systemctl --user restart chrome-borderless
 ```
+
+**Note:** The daemon runs as a background service. When `daemon.py` is updated, you must restart it for changes to take effect. The systemd service does not auto-reload on file changes.
 
 ## Uninstalling
 
