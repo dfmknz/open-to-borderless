@@ -15,7 +15,7 @@ sha256sums=("SKIP")
 install="$pkgname.install"
 
 pkgver() {
-    cd "$pkgname"
+    cd "$srcdir/$_reponame"
     git fetch --tags
     git describe --tags
 }
