@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MAX_RETRIES=200
+MAX_RETRIES=10
 RETRY_INTERVAL=3
 
 for ((i=1; i<=MAX_RETRIES; i++)); do
