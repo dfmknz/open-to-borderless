@@ -20,6 +20,8 @@ To complete setup:
 
 EOF
     
+    systemctl --user daemon-reload 2>/dev/null
+    
     read -p "Enable and start open-borderless daemon now? [Y/n] " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Nn]$ ]]; then
