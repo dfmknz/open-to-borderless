@@ -15,16 +15,14 @@ source=("https://github.com/dfmknz/open-to-borderless/archive/v${pkgver}.tar.gz"
 sha256sums=("SKIP")
 install="$pkgname.install"
 
-_reponame="open-to-borderless"
-
 package() {
-    install -Dm755 "${srcdir}/${_reponame}-${pkgver}/daemon-wrapper.sh" "${pkgdir}/usr/bin/open-borderless-wrapper"
-    install -Dm755 "${srcdir}/${_reponame}-${pkgver}/daemon.py" "${pkgdir}/usr/bin/open-borderless-daemon"
-    install -Dm644 "${srcdir}/${_reponame}-${pkgver}/systemd/${pkgname}.service" "${pkgdir}/usr/lib/systemd/user/${pkgname}.service"
+    install -Dm755 "${srcdir}/daemon-wrapper.sh" "${pkgdir}/usr/bin/open-borderless-wrapper"
+    install -Dm755 "${srcdir}/daemon.py" "${pkgdir}/usr/bin/open-borderless-daemon"
+    install -Dm644 "${srcdir}/systemd/${pkgname}.service" "${pkgdir}/usr/lib/systemd/user/${pkgname}.service"
 
     install -d "${pkgdir}/usr/share/${pkgname}/extension"
-    cp -r "${srcdir}/${_reponame}-${pkgver}/extension/"* "${pkgdir}/usr/share/${pkgname}/extension/"
+    cp -r "${srcdir}/extension/"* "${pkgdir}/usr/share/${pkgname}/extension/"
 
     install -d "${pkgdir}/usr/share/${pkgname}/docs"
-    cp -r "${srcdir}/${_reponame}-${pkgver}/docs/"* "${pkgdir}/usr/share/${pkgname}/docs/"
+    cp -r "${srcdir}/docs/"* "${pkgdir}/usr/share/${pkgname}/docs/"
 }
