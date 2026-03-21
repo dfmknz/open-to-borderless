@@ -10,6 +10,3 @@ Restart=always
 RestartSec=10
 StartLimitIntervalSec=300
 StartLimitBurst=20
-
-[Install]
-WantedBy=default.target

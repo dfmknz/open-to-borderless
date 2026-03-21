@@ -13,29 +13,62 @@ To complete setup:
    - Click "Load unpacked"
    - Select: /usr/share/open-borderless/extension/
 
-2. Enable the daemon (required for boot persistence):
-   systemctl --user enable --now open-borderless
-
-3. Test the extension: Shift + Click any link
+2. Test the extension: Shift + Click any link
 
 ========================================
 
 EOF
+
+    # Add to Hyprland autostart if not already present
+    AUTOSTART_CONF="$HOME/.config/hypr/autostart.conf"
+    AUTOSTART_LINE="exec-once = python3 /usr/bin/open-borderless-daemon"
+    
+    if [ -f "$AUTOSTART_CONF" ]; then
+        if ! grep -qF "$AUTOSTART_LINE" "$AUTOSTART_CONF"; then
+            echo "" >> "$AUTOSTART_CONF"
+            echo "$AUTOSTART_LINE" >> "$AUTOSTART_CONF"
+            echo "Added autostart entry to $AUTOSTART_CONF"
+        else
+            echo "Autostart entry already exists in $AUTOSTART_CONF"
+        fi
+    else
+        echo "$AUTOSTART_LINE" > "$AUTOSTART_CONF"
+        echo "Created $AUTOSTART_CONF with autostart entry"
+    fi
+    
+    # Start the daemon
+    systemctl --user start open-borderless 2>/dev/null || python3 /usr/bin/open-borderless-daemon &
+    echo "Daemon started."
 }
 
 post_upgrade() {
-    systemctl --user daemon-reload 2>/dev/null
+    # Ensure autostart entry exists
+    AUTOSTART_CONF="$HOME/.config/hypr/autostart.conf"
+    AUTOSTART_LINE="exec-once = python3 /usr/bin/open-borderless-daemon"
+    
+    if [ -f "$AUTOSTART_CONF" ] && ! grep -qF "$AUTOSTART_LINE" "$AUTOSTART_CONF"; then
+        echo "" >> "$AUTOSTART_CONF"
+        echo "$AUTOSTART_LINE" >> "$AUTOSTART_CONF"
+    fi
+    
+    # Restart the daemon
+    systemctl --user restart open-borderless 2>/dev/null || true
 }
 
 pre_remove() {
     echo "Stopping open-borderless daemon..."
     systemctl --user stop open-borderless 2>/dev/null || true
-    systemctl --user disable open-borderless 2>/dev/null || true
-    echo "Daemon stopped and disabled."
+    pkill -f "open-borderless-daemon" 2>/dev/null || true
+    echo "Daemon stopped."
 }
 
 post_remove() {
     echo ""
     echo "open-borderless has been removed."
+    echo ""
+    echo "To complete removal, edit ~/.config/hypr/autostart.conf"
+    echo "and remove the line:"
+    echo "  exec-once = python3 /usr/bin/open-borderless-daemon"
+    echo ""
     echo "To reinstall: makepkg -si"
 }
