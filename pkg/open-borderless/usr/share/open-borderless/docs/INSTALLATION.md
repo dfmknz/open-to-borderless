@@ -98,6 +98,7 @@ git pull
 # Restart the daemon to pick up changes
 pkill -f open-borderless
 ./daemon-wrapper.sh &
+
 ```
 
 **Note:** The daemon runs as a background service. When the daemon is updated, you must restart it for changes to take effect. The autostart entry does not auto-reload on file changes.
