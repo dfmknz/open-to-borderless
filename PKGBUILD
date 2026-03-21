@@ -1,5 +1,6 @@
 # Maintainer: Drew McKenzie <dfmknz@gmail.com>
 pkgname=open-borderless
+pkgver=1.1
 pkgrel=1
 pkgdesc="Open links in borderless windows with click + modifier keys on Hyprland"
 arch=("any")
@@ -13,12 +14,6 @@ optdepends=(
 source=("git+https://github.com/dfmknz/open-to-borderless.git")
 sha256sums=("SKIP")
 install="$pkgname.install"
-
-pkgver() {
-    cd "$srcdir/$_reponame"
-    git fetch --tags
-    git describe --tags
-}
 
 _reponame="open-to-borderless"
 
