@@ -7,8 +7,8 @@ for ((i=1; i<=MAX_RETRIES; i++)); do
     export WAYLAND_DISPLAY="${WAYLAND_DISPLAY}"
     export DISPLAY="${DISPLAY}"
     
-    # Test if Hyprland is ready
-    if hyprctl activeworkspace > /dev/null 2>&1; then
+    # Test if Hyprland socket exists
+    if [ -S "/tmp/hypr/${WAYLAND_DISPLAY}.sock" ]; then
         exec python3 /usr/bin/open-borderless-daemon
     fi
     
