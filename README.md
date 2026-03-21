@@ -25,7 +25,26 @@ Open links in borderless (frameless) windows with **left-click** or **middle-cli
 - Chromium-based browser (Chrome, Chromium, Brave, Arc, etc.)
 - Python 3
 
-## Quick Install
+## Installation
+
+### Option 1: PKGBUILD (Arch Linux / Omarchy) - Recommended
+
+```bash
+# Clone the repository
+git clone https://github.com/dfmknz/open-to-borderless.git
+cd open-to-borderless
+
+# Build and install
+makepkg -si
+
+# Load the extension in Chrome
+# chrome://extensions/ → Load unpacked → Select /usr/share/open-borderless/extension/
+
+# Enable and start the daemon
+systemctl --user enable --now open-borderless
+```
+
+### Option 2: Manual Install
 
 ```bash
 # Clone the repository
@@ -34,26 +53,6 @@ cd open-to-borderless
 
 # Run the installer
 ./install.sh
-```
-
-## Manual Install
-
-### 1. Load the Extension
-
-1. Go to `chrome://extensions/`
-2. Enable **Developer mode**
-3. Click **Load unpacked**
-4. Select the extension directory
-
-### 2. Start the Daemon
-
-```bash
-# Option A: Run directly (requires restart after reboot)
-~/.config/chrome-borderless/daemon-wrapper.sh &
-
-# Option B: Systemd (recommended)
-systemctl --user enable chrome-borderless
-systemctl --user start chrome-borderless
 ```
 
 ## Usage

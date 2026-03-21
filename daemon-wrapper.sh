@@ -9,7 +9,7 @@ for ((i=1; i<=MAX_RETRIES; i++)); do
     
     # Test if hyprctl works
     if hyprctl dispatch exec "echo ready" 2>/dev/null; then
-        exec python3 /home/drew/.config/chrome-borderless/daemon.py
+        exec python3 /usr/bin/open-borderless-daemon
     fi
     
     echo "Waiting for Hyprland... (attempt $i/$MAX_RETRIES)"

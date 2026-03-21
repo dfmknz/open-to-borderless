@@ -1,10 +1,10 @@
 [Unit]
-Description=Chrome Borderless HTTP Server
+Description=Open Borderless HTTP Server
 After=graphical-session.target
 
 [Service]
 Type=simple
-ExecStart=/home/%u/.config/chrome-borderless/daemon-wrapper.sh
+ExecStart=/usr/bin/open-borderless-wrapper
 Restart=on-failure
 RestartSec=5
 
