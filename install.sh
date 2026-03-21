@@ -17,12 +17,14 @@ mkdir -p "$(dirname "$SERVICE_FILE")"
 cat > "$SERVICE_FILE" << EOF
 [Unit]
 Description=Chrome Borderless HTTP Server
+After=graphical-session.target
 
 [Service]
 Type=simple
 ExecStart=$INSTALL_DIR/daemon.py
 Restart=on-failure
 RestartSec=5
+Environment="PATH=/usr/local/bin:/usr/bin:/bin"
 
 [Install]
 WantedBy=default.target
@@ -47,6 +49,7 @@ sleep 1
 echo "Enabling auto-startup..."
 systemctl --user daemon-reload 2>/dev/null || true
 systemctl --user enable chrome-borderless 2>/dev/null || echo "Note: systemctl not available, using autostart instead"
+systemctl --user import-environment WAYLAND_DISPLAY DISPLAY PATH 2>/dev/null || true
 systemctl --user restart chrome-borderless 2>/dev/null || true
 
 echo ""
