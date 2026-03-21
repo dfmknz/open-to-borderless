@@ -10,16 +10,9 @@ This guide covers common issues and their solutions.
 
 ### Possible Causes
 
-1. **Extension disabled**
-   - Check the toggle in the extension popup is ON
-
-2. **Wrong modifier configured**
-   - Verify your modifier settings match what you're pressing
-   - Open popup and check the shortcut display (e.g., "Left + Shift")
-
-3. **Content script not loaded**
-   - Reload the extension at `chrome://extensions/`
-   - Refresh the webpage
+**Content script not loaded**
+- Reload the extension at `chrome://extensions/`
+- Refresh the webpage
 
 ## Extension Context Invalidated Error
 
@@ -85,7 +78,7 @@ hyprctl version
 ps aux | grep -E "borderless|8765" | grep -v grep
 ```
 
-### Common fixes
+### Possible fixes
 
 1. **Start the daemon manually**
    ```bash
@@ -97,11 +90,6 @@ ps aux | grep -E "borderless|8765" | grep -v grep
    grep open-borderless ~/.config/hypr/autostart.conf
    ```
 
-3. **Verify Hyprland is running**
-   ```bash
-   hyprctl monitors
-   ```
-
 ## Borderless Window Doesn't Open
 
 ### Symptoms
@@ -109,25 +97,13 @@ ps aux | grep -E "borderless|8765" | grep -v grep
 - `curl` test works
 - But clicking links doesn't open windows
 
-### Check 1: Is `hyprctl` working?
-
-```bash
-hyprctl version
-```
-
-### Check 2: Can you manually open a borderless window?
+Can you manually open a borderless window?
 
 ```bash
 hyprctl dispatch exec "chromium --app=https://example.com"
 ```
 
 If this doesn't work, the issue is with Hyprland or Chromium.
-
-### Check 3: Is Chromium installed?
-
-```bash
-which chromium
-```
 
 ## Daemon Not Starting After Boot
 
@@ -161,11 +137,9 @@ grep open-borderless ~/.config/hypr/autostart.conf
 
 If you encounter an issue not covered here:
 
-1. Check Hyprland is running: `hyprctl monitors`
-2. Check Chromium is installed: `which chromium`
-3. Check daemon is running: `ps aux | grep open-borderless`
-4. Check extension is loaded: `chrome://extensions/`
-5. Check browser console for errors: F12 → Console
+1. Check daemon is running: `ps aux | grep open-borderless`
+2. Check extension is loaded: `chrome://extensions/`
+3. Check browser console for errors: F12 → Console
 
 For additional help, open an issue on GitHub with:
 - Your distribution and Hyprland version
