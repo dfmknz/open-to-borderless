@@ -20,7 +20,7 @@ The extension is compatible with any Hyprland-based distribution, including:
 - **Fedora Hyprland** - Fedora with Hyprland
 - Any custom Hyprland installation
 
-## Not Supported (Yet)
+## Not Supported
 
 The extension requires **Hyprland** and will not work with other window managers or operating systems.
 
