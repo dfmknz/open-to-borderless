@@ -21,11 +21,9 @@ The extension requires **left-click** or **middle-click** plus at least one modi
 
 1. Open the extension popup
 2. Check the modifiers you want to use:
-   - ☑ **Shift** - Required
-   - ☐ **Ctrl** - Optional
+   - ☑ **Shift**
+   - ☐ **Ctrl**
    - ☑ **Shift** + ☑ **Ctrl** - Either modifier works
-3. At least one modifier must be checked
-4. Settings save automatically
 
 The shortcut display shows your current configuration:
 - `Left + Shift` or `Middle + Shift` (Shift only)
@@ -34,7 +32,7 @@ The shortcut display shows your current configuration:
 
 ## Enabling/Disabling
 
-Use the **Extension Enabled** toggle in the popup to quickly enable or disable the feature without losing your modifier settings.
+Use the **Extension Enabled** toggle in the popup to quickly enable or disable the feature.
 
 ## How to Open a Borderless Window
 
@@ -43,26 +41,6 @@ Use the **Extension Enabled** toggle in the popup to quickly enable or disable t
 3. **Left-click** or **Middle-click** on any link
 4. The link opens in a new borderless (frameless) Chromium window
 
-### Middle-Click on Trackpad
-
-On most laptops, middle-click can be simulated with:
-- **Three-finger tap** (depending on touchpad settings)
-- **Click + tap** with another finger simultaneously
-
-## Window Behavior
-
-The borderless window has:
-- **No window decorations** (no title bar, borders, or shadows)
-- **Full functionality** (all links work, JavaScript runs, etc.)
-- **Hyprland controls** (move, resize, close with keyboard shortcuts)
-
-### Closing a Borderless Window
-
-Use the standard Hyprland methods:
-- `Super + Q` (if configured)
-- `killactive` keybinding (default: `Super + Shift + Q`)
-- Click the close button if added via Hyprland rules
-
 ## Settings Persistence
 
 All settings are stored in Chrome's extension storage:
@@ -70,16 +48,3 @@ All settings are stored in Chrome's extension storage:
 - Modifier configuration
 
 These persist across browser restarts and extension reloads.
-
-## Resetting Settings
-
-To reset to defaults:
-1. Open the popup
-2. Uncheck all modifiers (if possible)
-3. The extension will automatically revert to Shift + Middle
-
-Or remove the extension and reinstall.
-
-## Keyboard Shortcuts
-
-Currently, the only keyboard component is the modifier keys. Future versions may add customizable keyboard shortcuts.
