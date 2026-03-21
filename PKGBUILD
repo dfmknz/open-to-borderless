@@ -16,6 +16,7 @@ install="$pkgname.install"
 
 pkgver() {
     cd "$pkgname"
+    git fetch --tags
     git describe --tags
 }
 
