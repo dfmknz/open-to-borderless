@@ -7,8 +7,8 @@ for ((i=1; i<=MAX_RETRIES; i++)); do
     export WAYLAND_DISPLAY="${WAYLAND_DISPLAY}"
     export DISPLAY="${DISPLAY}"
     
-    # Test if hyprctl works
-    if hyprctl dispatch exec "echo ready" 2>/dev/null; then
+    # Test if Hyprland is ready
+    if hyprctl activeworkspace > /dev/null 2>&1; then
         exec python3 /usr/bin/open-borderless-daemon
     fi
     
