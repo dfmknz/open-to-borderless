@@ -150,26 +150,54 @@ class Handler(BaseHTTPRequestHandler):
 
 ### 4. Daemon Wrapper (`daemon-wrapper.sh`)
 
-**Purpose:** Set up environment variables before running the daemon
+**Purpose:** Set up environment variables before running the daemon, with retry logic
 
 **Runs in:** Started by systemd or autostart
 
 **Responsibilities:**
 - Inherit environment variables from the session
 - Export WAYLAND_DISPLAY and DISPLAY for Hyprland communication
-- Execute the Python daemon with correct environment
+- Retry connecting to Hyprland until it's ready (up to 10 minutes)
+- Execute the Python daemon once Hyprland responds
 
 **Key code pattern:**
 ```bash
 #!/bin/bash
-export WAYLAND_DISPLAY="${WAYLAND_DISPLAY}"
-export DISPLAY="${DISPLAY}"
-exec python3 /home/drew/.config/chrome-borderless/daemon.py
+
+MAX_RETRIES=200
+RETRY_INTERVAL=3
+
+for ((i=1; i<=MAX_RETRIES; i++)); do
+    export WAYLAND_DISPLAY="${WAYLAND_DISPLAY}"
+    export DISPLAY="${DISPLAY}"
+    
+    # Test if hyprctl works
+    if hyprctl dispatch exec "echo ready" 2>/dev/null; then
+        exec python3 /home/drew/.config/chrome-borderless/daemon.py
+    fi
+    
+    echo "Waiting for Hyprland... (attempt $i/$MAX_RETRIES)"
+    sleep $RETRY_INTERVAL
+done
+
+echo "Failed to connect to Hyprland after $MAX_RETRIES attempts"
+exit 1
+```
+
+**Retry behavior:**
+
+The wrapper retries every 3 seconds for up to 200 attempts (10 minutes). If Hyprland isn't ready within that time, the wrapper exits with an error. This handles boot scenarios where the systemd service might start before Hyprland is fully initialized.
+
+**Logging:**
+
+Retry attempts are logged to systemd journal and can be viewed with:
+```bash
+journalctl --user -u chrome-borderless -f
 ```
 
 **Why a wrapper script?**
 
-The wrapper ensures that the daemon has the correct environment variables to communicate with Hyprland. Systemd services don't automatically inherit session environment variables, so the wrapper bridges this gap.
+The wrapper ensures that the daemon has the correct environment variables to communicate with Hyprland. Systemd services don't automatically inherit session environment variables, so the wrapper bridges this gap. The retry logic ensures reliability on boot.
 
 ## Why HTTP Instead of Native Messaging?
 
