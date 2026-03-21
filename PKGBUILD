@@ -1,7 +1,7 @@
 # Maintainer: Drew McKenzie <dfmknz@gmail.com>
 pkgname=open-borderless
 pkgver=1.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Open links in borderless windows with click + modifier keys on Hyprland"
 arch=("any")
 url="https://github.com/dfmknz/open-to-borderless"
@@ -11,7 +11,7 @@ optdepends=(
     "chromium: Default browser for borderless windows"
     "google-chrome: Alternative browser"
 )
-source=("git+https://github.com/dfmknz/open-to-borderless.git")
+source=("open-to-borderless::git+https://github.com/dfmknz/open-to-borderless.git")
 sha256sums=("SKIP")
 install="$pkgname.install"
 
