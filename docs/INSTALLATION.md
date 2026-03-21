@@ -104,7 +104,7 @@ pkill -f open-borderless
 
 ## Uninstalling
 
-### PKGBUILD Installation
+### PKGBUILD
 ```bash
 # Remove the package
 sudo pacman -R open-borderless
@@ -112,7 +112,7 @@ sudo pacman -R open-borderless
 # Remove extension from Chrome at chrome://extensions/
 ```
 
-### Manual Installation
+### Manual
 ```bash
 # Remove autostart entry from ~/.config/hypr/autostart.conf
 # Edit the file and remove the line:
