@@ -4,6 +4,7 @@ After=graphical-session.target
 
 [Service]
 Type=simple
+Environment=WAYLAND_DISPLAY=wayland-1
 ExecStart=/usr/bin/open-borderless-wrapper
 Restart=on-failure
 RestartSec=5
