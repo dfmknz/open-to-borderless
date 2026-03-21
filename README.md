@@ -49,7 +49,7 @@ cd open-to-borderless
 
 ```bash
 # Option A: Run directly (requires restart after reboot)
-~/.config/chrome-borderless/daemon.py &
+~/.config/chrome-borderless/daemon-wrapper.sh &
 
 # Option B: Systemd (recommended)
 systemctl --user enable chrome-borderless
@@ -77,9 +77,15 @@ systemctl --user start chrome-borderless
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
 │  Content Script │───▶│  Background.js   │───▶│  HTTP Daemon    │
 │  (click events) │    │  (fetch localhost)│   │  (Python)       │
-└─────────────────┘    └──────────────────┘    └─────────────────┘
-                                                        │
-                                                        ▼
+└─────────────────┘    └──────────────────┘    └────────┬────────┘
+                                                       │
+                                                       ▼
+                                              ┌─────────────────┐
+                                              │  Daemon Wrapper │
+                                              │  (sets env vars)│
+                                              └────────┬────────┘
+                                                       │
+                                                       ▼
                                               ┌─────────────────┐
                                               │  Hyprland       │
                                               │  hyprctl dispatch│

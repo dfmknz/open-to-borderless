@@ -13,6 +13,9 @@ mkdir -p "$INSTALL_DIR"
 cp "$SCRIPT_DIR/daemon.py" "$INSTALL_DIR/daemon.py"
 chmod +x "$INSTALL_DIR/daemon.py"
 
+cp "$SCRIPT_DIR/daemon-wrapper.sh" "$INSTALL_DIR/daemon-wrapper.sh"
+chmod +x "$INSTALL_DIR/daemon-wrapper.sh"
+
 mkdir -p "$(dirname "$SERVICE_FILE")"
 cat > "$SERVICE_FILE" << EOF
 [Unit]
@@ -21,10 +24,9 @@ After=graphical-session.target
 
 [Service]
 Type=simple
-ExecStart=$INSTALL_DIR/daemon.py
+ExecStart=$INSTALL_DIR/daemon-wrapper.sh
 Restart=on-failure
 RestartSec=5
-Environment="PATH=/usr/local/bin:/usr/bin:/bin"
 
 [Install]
 WantedBy=default.target
@@ -35,7 +37,7 @@ cat > "$AUTOSTART_FILE" << EOF
 [Desktop Entry]
 Type=Application
 Name=Chrome Borderless
-Exec=$INSTALL_DIR/daemon.py
+Exec=$INSTALL_DIR/daemon-wrapper.sh
 Hidden=false
 NoDisplay=true
 X-GNOME-Autostart-enabled=true
@@ -43,13 +45,12 @@ EOF
 
 echo ""
 echo "Starting daemon..."
-$INSTALL_DIR/daemon.py &
+$INSTALL_DIR/daemon-wrapper.sh &
 sleep 1
 
 echo "Enabling auto-startup..."
 systemctl --user daemon-reload 2>/dev/null || true
 systemctl --user enable chrome-borderless 2>/dev/null || echo "Note: systemctl not available, using autostart instead"
-systemctl --user import-environment WAYLAND_DISPLAY DISPLAY PATH 2>/dev/null || true
 systemctl --user restart chrome-borderless 2>/dev/null || true
 
 echo ""

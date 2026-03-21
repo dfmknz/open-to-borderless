@@ -21,7 +21,7 @@ The extension consists of three main components:
 │  │   script.js)     │    │                  │    │                      │  │
 │  │                  │    │                  │    │                      │  │
 │  │  Listens for     │    │  Validates       │    │                      │  │
-│  │  auxclick events │    │  modifiers &     │    │                      │  │
+│  │  click events    │    │  modifiers &     │    │                      │  │
 │  │  on links        │    │  forwards URL    │    │                      │  │
 │  └─────────────────┘    └──────────────────┘    └──────────┬───────────┘  │
 │                                                             │              │
@@ -30,6 +30,14 @@ The extension consists of three main components:
                                                               ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                           Localhost (127.0.0.1)                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                    Daemon Wrapper (daemon-wrapper.sh)                 │   │
+│  │                                                                       │   │
+│  │   Sets environment variables (WAYLAND_DISPLAY, DISPLAY)               │   │
+│  │   Then executes daemon.py                                            │   │
+│  └────────────────────────────────┬────────────────────────────────────┘   │
+│                                   │                                         │
+│                                   ▼                                         │
 │  ┌─────────────────────────────────────────────────────────────────────┐   │
 │  │                         HTTP Daemon (daemon.py)                     │   │
 │  │                                                                       │   │
@@ -139,6 +147,29 @@ class Handler(BaseHTTPRequestHandler):
                 f'chromium --app={url}'
             ])
 ```
+
+### 4. Daemon Wrapper (`daemon-wrapper.sh`)
+
+**Purpose:** Set up environment variables before running the daemon
+
+**Runs in:** Started by systemd or autostart
+
+**Responsibilities:**
+- Inherit environment variables from the session
+- Export WAYLAND_DISPLAY and DISPLAY for Hyprland communication
+- Execute the Python daemon with correct environment
+
+**Key code pattern:**
+```bash
+#!/bin/bash
+export WAYLAND_DISPLAY="${WAYLAND_DISPLAY}"
+export DISPLAY="${DISPLAY}"
+exec python3 /home/drew/.config/chrome-borderless/daemon.py
+```
+
+**Why a wrapper script?**
+
+The wrapper ensures that the daemon has the correct environment variables to communicate with Hyprland. Systemd services don't automatically inherit session environment variables, so the wrapper bridges this gap.
 
 ## Why HTTP Instead of Native Messaging?
 
