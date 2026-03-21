@@ -13,15 +13,30 @@ To complete setup:
    - Click "Load unpacked"
    - Select: /usr/share/open-borderless/extension/
 
-2. Enable and start the daemon:
-   systemctl --user enable --now open-borderless
-
-3. Test the extension:
-   Shift + Click any link on any webpage
+2. Enable and start the daemon?
+   - Will be enabled and started if you choose yes
 
 ========================================
 
 EOF
+    
+    read -p "Enable and start open-borderless daemon now? [Y/n] " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        if systemctl --user enable --now open-borderless 2>/dev/null; then
+            echo "Daemon enabled and started successfully!"
+        else
+            echo "Failed to enable daemon. Run manually:"
+            echo "  systemctl --user enable --now open-borderless"
+        fi
+    else
+        echo "Skipped. To enable later, run:"
+        echo "  systemctl --user enable --now open-borderless"
+    fi
+    
+    echo ""
+    echo "Test the extension: Shift + Click any link"
+    echo "========================================"
 }
 
 post_upgrade() {
@@ -29,6 +44,14 @@ post_upgrade() {
 }
 
 pre_remove() {
+    echo "Stopping open-borderless daemon..."
     systemctl --user stop open-borderless 2>/dev/null || true
     systemctl --user disable open-borderless 2>/dev/null || true
+    echo "Daemon stopped and disabled."
+}
+
+post_remove() {
+    echo ""
+    echo "open-borderless has been removed."
+    echo "To reinstall: makepkg -si"
 }

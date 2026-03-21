@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      width: 280px;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+    }
+    h1 {
+      font-size: 16px;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+    .info {
+      font-size: 13px;
+      color: #aaa;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .shortcut {
+      background: #16213e;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #00d9ff;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .modifier-section {
+      background: #16213e;
+      padding: 12px 14px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+    .modifier-section h2 {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .modifier-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+    }
+    .modifier-label {
+      font-size: 14px;
+    }
+    .modifier-hint {
+      font-size: 11px;
+      color: #666;
+    }
+    .toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #333;
+      transition: 0.3s;
+      border-radius: 24px;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+    input:checked + .toggle-slider {
+      background-color: #00d9ff;
+    }
+    input:checked + .toggle-slider:before {
+      transform: translateX(20px);
+    }
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-top: 1px solid #333;
+    }
+    .toggle-label {
+      font-size: 14px;
+    }
+    .warning {
+      background: #ff4444;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-top: 8px;
+      display: none;
+    }
+    .status {
+      font-size: 11px;
+      color: #666;
+      margin-top: 12px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Open to Borderless</h1>
+  <p class="info">
+    Click any link with <strong>Left-click</strong> or <strong>Middle-click</strong> while holding your chosen modifier(s) to open it in a borderless window.
+  </p>
+  <div class="shortcut" id="shortcutDisplay">Middle + Shift</div>
+
+  <div class="modifier-section">
+    <h2>Modifiers</h2>
+    <div class="modifier-row">
+      <div>
+        <span class="modifier-label">Shift</span>
+        <span class="modifier-hint"> (default)</span>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="optShift" checked>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    <div class="modifier-row">
+      <span class="modifier-label">Ctrl</span>
+      <label class="toggle">
+        <input type="checkbox" id="optCtrl">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    <div class="warning" id="warning">At least one modifier is required</div>
+  </div>
+
+  <div class="toggle-row">
+    <span class="toggle-label">Extension Enabled</span>
+    <label class="toggle">
+      <input type="checkbox" id="enableToggle" checked>
+      <span class="toggle-slider"></span>
+    </label>
+  </div>
+  <p class="status" id="status">Ready</p>
+
+  <script src="popup.js"></script>
+</body>
+</html>
