@@ -16,7 +16,7 @@ Open links in borderless (frameless) windows with **left-click** or **middle-cli
 - **Left-click or Middle-click + Shift/Ctrl** to open links in borderless windows
 - **Configurable modifiers** (Shift, Ctrl, or both)
 - **Toggle on/off** from extension popup
-- **Automatic startup** via systemd
+- **Automatic startup** via systemd or autostart
 - **Persistent settings** across browser sessions
 
 ## Requirements
@@ -27,7 +27,7 @@ Open links in borderless (frameless) windows with **left-click** or **middle-cli
 
 ## Installation
 
-### PKGBUILD (Arch Linux / Omarchy)
+### Option 1: PKGBUILD (Arch Linux / Omarchy) - Recommended
 
 ```bash
 # Clone the repository
@@ -36,9 +36,24 @@ cd open-to-borderless
 
 # Build and install
 makepkg -si
+
+# Load the extension in Chrome
+# chrome://extensions/ → Load unpacked → Select /usr/share/open-borderless/extension/
+
+# Enable and start the daemon
+systemctl --user enable --now open-borderless
 ```
 
-The PKGBUILD will prompt you to enable the systemd service during installation.
+### Option 2: Manual Install
+
+```bash
+# Clone the repository
+git clone https://github.com/dfmknz/open-to-borderless.git
+cd open-to-borderless
+
+# Run the installer
+./install.sh
+```
 
 ## Usage
 

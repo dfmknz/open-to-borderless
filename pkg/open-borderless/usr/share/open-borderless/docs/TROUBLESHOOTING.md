@@ -5,7 +5,7 @@ This guide covers common issues and their solutions.
 ## Extension Not Detecting Clicks
 
 ### Symptoms
-- Click + Shift doesn't open a borderless window
+- Middle-click + Shift doesn't open a borderless window
 - No console errors in extension popup
 
 ### Possible Causes
@@ -15,7 +15,7 @@ This guide covers common issues and their solutions.
 
 2. **Wrong modifier configured**
    - Verify your modifier settings match what you're pressing
-   - Open popup and check the shortcut display (e.g., "Left + Shift")
+   - Open popup and check the shortcut display (e.g., "Middle + Shift")
 
 3. **Content script not loaded**
    - Reload the extension at `chrome://extensions/`
@@ -44,12 +44,12 @@ Chrome's extension API connection becomes invalid when the extension reloads.
 ### Check 1: Is the daemon running?
 
 ```bash
-systemctl --user status open-borderless
+ps aux | grep daemon.py | grep -v grep
 ```
 
-If not running, start it:
+If no output, start the daemon:
 ```bash
-systemctl --user start open-borderless
+~/.config/chrome-borderless/daemon.py &
 ```
 
 ### Check 2: Can you reach the daemon manually?
@@ -62,40 +62,34 @@ curl -X POST http://localhost:8765/open \
 
 Should return: `{"success": true}`
 
+If not, check the daemon logs or restart it.
+
 ### Check 3: Is the port in use?
 
 ```bash
 lsof -i :8765
 ```
 
-If another process is using port 8765, there may be a conflict.
+If another process is using port 8765, you'll need to change the port in `daemon.py`.
 
 ## Daemon Won't Start
 
 ### Symptoms
-Service fails to start or exits immediately.
+Running `daemon.py` exits immediately or shows an error
 
-### Check logs
+### Cause
+Python version issue or missing modules
+
+### Solution
 ```bash
-journalctl --user -u open-borderless
+# Check Python version
+python3 --version
+
+# Should be Python 3.6+
+
+# Run with explicit python3
+python3 ~/.config/chrome-borderless/daemon.py
 ```
-
-### Common fixes
-
-1. **Restart the service**
-   ```bash
-   systemctl --user restart open-borderless
-   ```
-
-2. **Check if Hyprland is ready**
-   ```bash
-   hyprctl version
-   ```
-
-3. **Check for conflicting daemons**
-   ```bash
-   ps aux | grep -E "borderless|8765" | grep -v grep
-   ```
 
 ## Borderless Window Doesn't Open
 
@@ -116,36 +110,62 @@ hyprctl version
 hyprctl dispatch exec "chromium --app=https://example.com"
 ```
 
-If this doesn't work, the issue is with Hyprland or Chromium.
+If this doesn't work, the issue is with Hyprland or Chromium, not the extension.
 
 ### Check 3: Is Chromium installed?
 
 ```bash
 which chromium
+which google-chrome-stable
 ```
 
-## Systemd Service Not Starting After Boot
+If not found, install Chromium:
+```bash
+# Arch Linux
+sudo pacman -S chromium
+
+# Ubuntu/Debian
+sudo apt install chromium-browser
+```
+
+## Systemd Service Not Starting
 
 ### Symptoms
-- Service shows failed or inactive after reboot
-- Daemon not running
+- `systemctl --user status chrome-borderless` shows failed
+- Daemon not running after reboot
 
 ### Check logs
 ```bash
-journalctl --user -u open-borderless
+journalctl --user -u chrome-borderless
 ```
 
+### Common fixes
+
+1. **Service file location**
+   ```bash
+   systemctl --user enable chrome-borderless
+   systemctl --user start chrome-borderless
+   ```
+
+2. **Daemon permissions**
+   ```bash
+   chmod +x ~/.config/chrome-borderless/daemon.py
+   ```
+
+3. **DBus issues**
+   ```bash
+   systemctl --user start chrome-borderless
+   ```
+
+## Permission Denied Errors
+
+### Symptoms
+Cannot create socket or execute daemon
+
 ### Solution
-
-1. Enable the service:
-   ```bash
-   systemctl --user enable --now open-borderless
-   ```
-
-2. If using linger (for boot persistence):
-   ```bash
-   sudo loginctl enable-linger
-   ```
+```bash
+chmod +x ~/.config/chrome-borderless/daemon.py
+```
 
 ## Getting Help
 
@@ -153,7 +173,7 @@ If you encounter an issue not covered here:
 
 1. Check Hyprland is running: `hyprctl monitors`
 2. Check Chromium is installed: `which chromium`
-3. Check daemon is running: `systemctl --user status open-borderless`
+3. Check daemon is running: `ps aux | grep daemon.py`
 4. Check extension is loaded: `chrome://extensions/`
 5. Check browser console for errors: F12 → Console
 

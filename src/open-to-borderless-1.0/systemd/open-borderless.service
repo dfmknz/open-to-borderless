@@ -1,0 +1,12 @@
+[Unit]
+Description=Open Borderless HTTP Server
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/open-borderless-wrapper
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

@@ -4,12 +4,11 @@ This document explains how the Open to Borderless extension works internally.
 
 ## Overview
 
-The extension consists of four main components:
+The extension consists of three main components:
 
-1. **Chrome Extension** - Detects click events and sends URLs
-2. **Daemon Wrapper** - Sets up environment and retries until Hyprland is ready
-3. **HTTP Daemon** - Receives URLs and executes Hyprland commands
-4. **Hyprland** - Window manager that creates borderless windows
+1. **Chrome Extension** - Detects middle-click events and sends URLs
+2. **HTTP Daemon** - Receives URLs and executes Hyprland commands
+3. **Hyprland** - Window manager that creates borderless windows
 
 ## Component Diagram
 
@@ -23,7 +22,7 @@ The extension consists of four main components:
 │  │                  │    │                  │    │                      │  │
 │  │  Listens for     │    │  Validates       │    │                      │  │
 │  │  click events    │    │  modifiers &     │    │                      │  │
-│  │  on links        │    │  forwards URL   │    │                      │  │
+│  │  on links        │    │  forwards URL    │    │                      │  │
 │  └─────────────────┘    └──────────────────┘    └──────────┬───────────┘  │
 │                                                             │              │
 └─────────────────────────────────────────────────────────────│──────────────┘
@@ -35,13 +34,12 @@ The extension consists of four main components:
 │  │                    Daemon Wrapper (daemon-wrapper.sh)                 │   │
 │  │                                                                       │   │
 │  │   Sets environment variables (WAYLAND_DISPLAY, DISPLAY)               │   │
-│  │   Retries until Hyprland responds (up to 10 minutes)                  │   │
-│  │   Then executes daemon.py                                             │   │
+│  │   Then executes daemon.py                                            │   │
 │  └────────────────────────────────┬────────────────────────────────────┘   │
 │                                   │                                         │
 │                                   ▼                                         │
 │  ┌─────────────────────────────────────────────────────────────────────┐   │
-│  │                         HTTP Daemon (daemon.py)                      │   │
+│  │                         HTTP Daemon (daemon.py)                     │   │
 │  │                                                                       │   │
 │  │   POST /open                                                        │   │
 │  │   { "url": "https://example.com" }                                  │   │
@@ -59,8 +57,8 @@ The extension consists of four main components:
 │                                                                             │
 │   Creates a new Chromium window with:                                       │
 │   - --app flag (app mode, no browser chrome)                               │
-│   - Borderless/frameless decorations                                        │
-│   - Full URL loaded                                                         │
+│   - Borderless/frameless decorations                                       │
+│   - Full URL loaded                                                        │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -69,22 +67,20 @@ The extension consists of four main components:
 
 ### 1. Content Script (`content-script.js`)
 
-**Purpose:** Detect click events on links
+**Purpose:** Detect middle-click events on links
 
 **Runs in:** Each webpage's context
 
 **Responsibilities:**
-- Listen for `click` and `auxclick` events (left and middle mouse buttons)
+- Listen for `auxclick` events (middle mouse button)
 - Find the nearest parent `<a>` element
-- Prevent default link behavior when modifiers are pressed
+- Prevent default link behavior
 - Send URL and modifier key state to background script via port connection
 
 **Key code pattern:**
 ```javascript
-document.addEventListener('click', (e) => {
-  // Left click (button 0) or middle click (button 1)
-  if (e.button !== 0 && e.button !== 1) return;
-  if (!e.shiftKey && !e.ctrlKey) return;  // Only intercept with modifiers
+document.addEventListener('auxclick', (e) => {
+  if (e.button !== 1) return;  // Middle button only
 
   const link = e.target.closest('a');
   if (!link) return;
@@ -133,7 +129,7 @@ chrome.runtime.onConnect.addListener((port) => {
 
 **Purpose:** Bridge between extension and Hyprland
 
-**Runs in:** Background (systemd)
+**Runs in:** Background (systemd or autostart)
 
 **Responsibilities:**
 - Listen for HTTP POST requests
@@ -156,7 +152,7 @@ class Handler(BaseHTTPRequestHandler):
 
 **Purpose:** Set up environment variables before running the daemon, with retry logic
 
-**Runs in:** Started by systemd
+**Runs in:** Started by systemd or autostart
 
 **Responsibilities:**
 - Inherit environment variables from the session
@@ -177,7 +173,7 @@ for ((i=1; i<=MAX_RETRIES; i++)); do
     
     # Test if hyprctl works
     if hyprctl dispatch exec "echo ready" 2>/dev/null; then
-        exec python3 /usr/bin/open-borderless-daemon
+        exec python3 /home/drew/.config/chrome-borderless/daemon.py
     fi
     
     echo "Waiting for Hyprland... (attempt $i/$MAX_RETRIES)"
@@ -196,7 +192,7 @@ The wrapper retries every 3 seconds for up to 200 attempts (10 minutes). If Hypr
 
 Retry attempts are logged to systemd journal and can be viewed with:
 ```bash
-journalctl --user -u open-borderless -f
+journalctl --user -u chrome-borderless -f
 ```
 
 **Why a wrapper script?**
@@ -214,23 +210,22 @@ Chrome's native messaging (`chrome.runtime.sendNativeMessage`) was initially use
 
 ## Data Flow
 
-1. User clicks a link while holding Shift
-2. Content script detects `click` or `auxclick` event
-3. Content script checks for Shift/Ctrl modifier keys
-4. Content script sends URL + modifier state via port
-5. Background script validates against stored config
-6. Background script sends HTTP POST to localhost:8765
-7. HTTP daemon receives request
-8. Daemon executes `hyprctl dispatch exec "chromium --app=<url>"`
-9. Hyprland spawns new Chromium window in app mode
-10. New window appears borderless
+1. User middle-clicks a link while holding Shift
+2. Content script detects `auxclick` event
+3. Content script sends URL + modifier state via port
+4. Background script validates against stored config
+5. Background script sends HTTP POST to localhost:8765
+6. HTTP daemon receives request
+7. Daemon executes `hyprctl dispatch exec "chromium --app=<url>"`
+8. Hyprland spawns new Chromium window in app mode
+9. New window appears borderless
 
 ## Security Considerations
 
 - **localhost only** - Daemon only accepts connections from localhost
 - **No arbitrary code execution** - Daemon only executes predefined command
 - **URL validation** - Basic check that URL is valid before processing
-- **User consent** - Click with modifier is an intentional user action
+- **User consent** - Middle-click is an intentional user action
 
 ## Future Improvements
 
