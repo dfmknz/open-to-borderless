@@ -62,8 +62,8 @@ The PKGBUILD will prompt you to enable the systemd service during installation.
 │  Content Script │───▶│  Background.js   │───▶│  HTTP Daemon    │
 │  (click events) │    │  (fetch localhost)│   │  (Python)       │
 └─────────────────┘    └──────────────────┘    └────────┬────────┘
-                                                       │
-                                                       ▼
+                                                        │
+                                                        ▼
                                               ┌─────────────────┐
                                               │  Daemon Wrapper │
                                               │  (sets env vars)│
