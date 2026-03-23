@@ -9,7 +9,7 @@
   <img src="https://img.shields.io/badge/Chrome%20Extension-MV3-green?style=flat-square" alt="Chrome MV3">
 </p>
 
-Open links in borderless (frameless) windows with **left-click** or **middle-click** + **modifier keys** on Hyprland. Useful when you want to open web apps to your current workspace rather than the one chromium is on.
+Open links in borderless (frameless) windows with **left-click** or **middle-click** + **modifier keys** on Hyprland. Useful when you want to open web app links to your current workspace rather than the one chromium is on.
 ## Features
 
 - **Left-click or Middle-click + Shift/Ctrl** to open links in borderless windows
