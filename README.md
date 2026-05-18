@@ -37,9 +37,9 @@ cd open-to-borderless
 makepkg -si
 ```
 ### Load in the browser
-Go to manage extensions
-Enable developer options
-Load into browser from path/to/open-to-borderless/extension/
+- Go to manage extensions
+- Enable developer options
+- Load into browser from path/to/open-to-borderless/extension/
 
 
 ## Usage
